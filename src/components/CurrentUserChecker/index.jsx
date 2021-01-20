@@ -9,7 +9,6 @@ const CurrentUserChecker = ({children}) => {
     const [{response}, doFetch] = useFetch('/test/edit-user')
     const [state, dispatch] = useContext(CurrentUserContext);
     const [token] = useLocalStorage('tokenMavinx');
-    console.log('context', state)
     useEffect(() => {
 
         if(!token){

@@ -28,13 +28,15 @@ const Authentication = props => {
     const [password, setPassword] = useState('');
     const [passwordConfirmation, setPasswordConfirmation] = useState('');
     const apiUrl = isLogin ? '/test/login' : '/test/register';
-    //const [messages, setMessages] = useState(true)
+    const [messages, setMessages] = useState(false)
     const [isSubmitLogin, setIsSubmitLogin] = useState(false)
     const [isSubmitRegister, setIsSubmitRegister] = useState(false)
     const [{response, isLoading, error}, doFetch] = UseFetch(apiUrl);
     const [token, setToken] = UseLocalStorage('tokenMavinx')
     const [, dispatch] = useContext(CurrentUserContext)
-
+    if(messages){
+        console.log('m', response.message)
+    }
     const handleSubmit = event => {
         event.preventDefault()
         const user = isLogin ?
@@ -54,13 +56,19 @@ const Authentication = props => {
             data: user
 
         })
-        // if(response){
-        //     setMessages(false)
-        //     setTimeout(() => {
-        //         setMessages(true)
-        //     }, 2500)
-        // }
     }
+    useEffect(() => {
+        let skipGetResponseAfterDestroy = false;
+        if(response){
+            setMessages(true)
+            setTimeout(() => {
+                setMessages(false)
+            }, 2500)
+        }
+        return () => {
+            skipGetResponseAfterDestroy = true
+        }
+    }, [response])
 
     useEffect(() => {
         if(!response){
@@ -76,7 +84,9 @@ const Authentication = props => {
                     setIsSubmitLogin(true)
                 } else{
                     setIsSubmitLogin(false)
-                    setIsSubmitRegister(true)
+                    setTimeout(() => {
+                        setIsSubmitRegister(true)
+                    }, 2500)
                 }
         }
     }, [response, error, isLogin, setToken, dispatch])
@@ -99,9 +109,9 @@ const Authentication = props => {
                             to={descriptionLink}
                         >
                             {descriptionText}
-                            {/*{*/}
-                            {/*    !messages && <p>{response.message}</p>*/}
-                            {/*}*/}
+                            {
+                                messages && <p>{response.message}</p>
+                            }
                         </Text>
                         <form onSubmit={handleSubmit}>
                             {

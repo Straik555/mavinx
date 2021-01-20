@@ -1,17 +1,13 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import {Redirect} from "react-router-dom";
 
 import PageWrapper from "../../components/PageWrapper";
-import {CurrentUserContext} from "../../context/currentUser";
 import UseLocalStorage from "../../hooks/UseLocalStorage";
 import MainContent from "./MainContant";
 import MainFilter from "./MainFilter";
 
 const Main = () => {
-    const [state] = useContext(CurrentUserContext);
     const [token,] = UseLocalStorage('tokenMavinx')
-    console.log('t', token)
-    console.log('s', state)
     if(!token){
         return <Redirect to={'/'} />
     }
