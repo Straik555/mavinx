@@ -3,13 +3,16 @@ import {BrowserRouter as Router} from 'react-router-dom';
 
 import Routes from './routes';
 import {CurrentUserProvider} from "./context/currentUser";
+import CurrentUserChecker from "./components/CurrentUserChecker";
 
 const App = () => {
     return (
         <CurrentUserProvider>
-            <Router>
-                <Routes />
-            </Router>
+            <CurrentUserChecker>
+                <Router>
+                    <Routes />
+                </Router>
+            </CurrentUserChecker>
         </CurrentUserProvider>
     )
 }

@@ -33,11 +33,10 @@ const Hamburger = styled(Icon).attrs({
 
 const MenuWrap = styled.div`
   display: flex;
-  
     position: fixed;
     top: 0;
     right: 0;
-    button: 0;
+    bottom: 0;
     z-index: 100;
     transition: 0.3s;
     transform: translateX(100%);

@@ -6,13 +6,37 @@ import {
     FormBody,
     Title,
     Text,
-    Fieldset
+    Fieldset,
+    Wrapper,
+    Message
 } from './style';
 import {CurrentUserContext} from "../../context/currentUser";
 import {ACTION} from "../../context/currentUser";
 import UseFetch from "../../hooks/UseFetch";
 import UseLocalStorage from '../../hooks/UseLocalStorage';
 import BackendErrorMessages from "../../components/BackendErrorMessages";
+
+const MessageOpen = {
+  position: 'fixed',
+  top: 0,
+  right: 0,
+  width: '200px',
+  height: '80px',
+  border: '1px solid red',
+  padding: '30px',
+  transition: '0.3s',
+}
+
+const MessageClose = {
+  position: 'fixed',
+  top: 0,
+  right: '-200px',
+  height: '80px',
+  width: '200px',
+  border: '1px solid red',
+  padding: '30px',
+  transition: '0.3s',
+};
 
 const Authentication = props => {
     const isLogin = props.match.path === '/login';
@@ -31,12 +55,10 @@ const Authentication = props => {
     const [messages, setMessages] = useState(false)
     const [isSubmitLogin, setIsSubmitLogin] = useState(false)
     const [isSubmitRegister, setIsSubmitRegister] = useState(false)
-    const [{response, isLoading, error}, doFetch] = UseFetch(apiUrl);
-    const [token, setToken] = UseLocalStorage('tokenMavinx')
+    const [{response, error}, doFetch] = UseFetch(apiUrl);
+    const [, setToken] = UseLocalStorage('tokenMavinx')
     const [, dispatch] = useContext(CurrentUserContext)
-    if(messages){
-        console.log('m', response.message)
-    }
+
     const handleSubmit = event => {
         event.preventDefault()
         const user = isLogin ?
@@ -100,7 +122,14 @@ const Authentication = props => {
     }
 
     return (
-        <div>
+        <Wrapper>
+            {
+                messages && (
+                    <Message style={messages && {transform: 'translateX(0)'}}>
+                        <p style={{width: '200px', background: 'aliceblue', padding: '30px 10px'}}>{response.message}</p>
+                    </Message>
+                )
+            }
             <div>
                 <Banner>
                     <FormBody>
@@ -109,9 +138,6 @@ const Authentication = props => {
                             to={descriptionLink}
                         >
                             {descriptionText}
-                            {
-                                messages && <p>{response.message}</p>
-                            }
                         </Text>
                         <form onSubmit={handleSubmit}>
                             {
@@ -206,7 +232,7 @@ const Authentication = props => {
                     </FormBody>
                 </Banner>
             </div>
-        </div>
+        </Wrapper>
     )
 }
 

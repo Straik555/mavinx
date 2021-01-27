@@ -7,10 +7,9 @@ import {ACTION} from "../../context/currentUser";
 
 const CurrentUserChecker = ({children}) => {
     const [{response}, doFetch] = useFetch('/test/edit-user')
-    const [state, dispatch] = useContext(CurrentUserContext);
+    const [,dispatch] = useContext(CurrentUserContext);
     const [token] = useLocalStorage('tokenMavinx');
     useEffect(() => {
-
         if(!token){
             dispatch({type: ACTION.SET_UNAUTHORIZED})
             return
@@ -28,6 +27,7 @@ const CurrentUserChecker = ({children}) => {
         dispatch({type: ACTION.SET_AUTHORIZED, payload: response.user})
     }, [response, dispatch])
 
+    console.log('currentUser', response)
     return children
 }
 
